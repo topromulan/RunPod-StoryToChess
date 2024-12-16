@@ -6,8 +6,10 @@ print()
 import runpod
 import ollama
 
-print("Pulling model")
-ollama.pull(model='llama2')
+my_model='llama2'
+
+print("Pulling model", my_model)
+ollama.pull(model=my_model)
 print("Pulled!")
 
 llama_instructions_v3="""
@@ -38,7 +40,7 @@ def handler(job):
 
     print("Considering..")
 
-    og = ollama.generate(model='stupid_test1', prompt=llama_instructions+job_input['story'])
+    og = ollama.generate(model=my_model, prompt=llama_instructions+job_input['story'])
 
     job_output = og['response']
 
