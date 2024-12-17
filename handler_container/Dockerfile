@@ -14,7 +14,7 @@ ENV PATH="/opt/python3/bin:$PATH"
 RUN python3 -m pip install runpod
 RUN python3 -m pip install ollama
 
-COPY chess_analogy_service.sh chess_analogy_handler.py test_input.json /
+COPY chess_analogy_service.sh chess_analogy_handler.py model_instructions.txt test_input.json /
 
 CMD ./chess_analogy_service.sh
 

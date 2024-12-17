@@ -1,4 +1,4 @@
-#!/python3/bin/python3 -u
+#!/python3/bin/pythn3 -u
 
 print("CHESS ANALOGY HANDLER")
 print()
@@ -6,46 +6,21 @@ print()
 import runpod
 import ollama
 
+from sys import argv
+from os.path import dirname
+
 #my_model='llama2'
 #my_model='mistral'
 my_model='starling-lm'
 
-# Can this be in the Dockerfile? Should it be (large)?
+# Can this be in the Dockerfile? Should it be (large)? Or network volume?
 print("Pulling model", my_model)
 ollama.pull(model=my_model)
 print("Pulled!")
 
-llama_instructions_v3="""
-You, LLM, are a master chess interpretist. What you do is take in a user story, see the underlying aspects of the story, and map them into an illustrative chess game.
-Plot the game moves to cleverly follow the aspects of the story, or to include analogous scenarios or conclusions.
-Be especially careful to check that every move is actually legal in the game.
-Limit the length of the discussion to ten to fifteen moves. The game does not NEED to be done by then - it can depend on the story.
-Do not speak of these requirements - merely follow them. Thank you.
-Present to the user in this specific format:
+llama_instructions=open(dirname(argv[0]) + "/model_instructions.txt").read()
 
-The algebraic notion of the move, followed by an optional short comment of 80 characters or less. For example:
-
-1. a3 e5 : The protagonist (White) timidly limits its advance, but the antagonist (Black) explodes back!
-2. h3 d5 : The ugly fox keeps taking advantage of the darling swan that is minding its own business.
-3. e4 dxe4
-4. d4 exd3
-5. cxd3 : Here the handsome good guy from the story gambit pays dividents!
-
-My examples are of the format only and suffer from not corresponding to a real story:
- - Try to make the comments refer to the story elements, better than my examples, and tell the story through the game.
- - Refer to white and black as the story's perceived protagonist and antagonist, where possible. Again, my example is general, but try to avoid solely referring to black and white. If the story has no clear characters, be creative. And DON'T call them antagonist and protagonist. Use their names.
- - Make sure the moves are real legal chess moves forming an actual possible legal game.
- - And remember to always include BOTH players' play, the play of white and black, both on every numbered move.
- - Try to mention something from the user story in every move! That is what the user wants to hear about!
-
-Before the game/whole segment, print the commemorative title, date, and location on three consecutive lines, or in any kind of ASCII frame you think suitable. Use the ASCII framing randomly with a 25% chance.
-
-After the game, before ending, print a final paragraph of less than 80 words pointing out your cleverest analogies to the user story. Entitle this section "Recap:" or similar.
-
-Finally, print some kind of related ASCII art (less than ten lines long)."""
-
-
-llama_instructions=llama_instructions_v3 + """
+llama_instructions += """
 Everything after this line is the user story:
 My user story is as follows. """
 
@@ -57,7 +32,11 @@ def handler(job):
 
     print("Considering the matter..")
 
-    og = ollama.generate(model=my_model, prompt=llama_instructions+job_input['story'])
+    og = ollama.generate(
+        model=my_model,
+        options={"temperature":7900.0},
+        prompt=llama_instructions+job_input['story']
+    )
 
     job_output = og['response']
 

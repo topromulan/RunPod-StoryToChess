@@ -10,3 +10,6 @@ Run the client ChessStory.sh at that same command line.
 With no arguments, it will ask you to write a story and return your story ID.
 
 To read the chess interpretation of your story, supply the story ID as an argument.
+
+To test handler on the local machine, try:
+ - python3.exe chess_analogy_handler.sh --test_input='{"input":{"story":"A chocolate cow makes way to a new pasture and strawberry flavor."}}'
