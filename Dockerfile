@@ -7,12 +7,14 @@ RUN apt-get install -y curl python3-full pip
 
 RUN curl -fsSL https://ollama.com/install.sh | sh
 
-RUN mkdir /python3
-RUN python3 -m venv /python3
-RUN /python3/bin/python3 -m pip install runpod
-RUN /python3/bin/python3 -m pip install ollama
+RUN mkdir -p /opt/python3
+RUN python3 -m venv /opt/python3
+ENV PATH="/opt/python3/bin:$PATH"
 
-COPY chess_analogy_handler.py chess_analogy_start.sh test_input.json /
+RUN python3 -m pip install runpod
+RUN python3 -m pip install ollama
 
-CMD /chess_analogy_start.sh
+COPY chess_analogy_service.sh chess_analogy_handler.py test_input.json /
+
+CMD ./chess_analogy_service.sh
 

@@ -8,4 +8,4 @@ sleep 5
 
 echo
 echo -- - Starting Handler
-/python3/bin/python3 -u chess_analogy_handler.py
+python3 -u chess_analogy_handler.py

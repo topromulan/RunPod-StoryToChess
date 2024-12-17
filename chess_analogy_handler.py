@@ -8,6 +8,7 @@ import ollama
 
 my_model='llama2'
 
+# Can this be in the Dockerfile? Should it be (large)?
 print("Pulling model", my_model)
 ollama.pull(model=my_model)
 print("Pulled!")
