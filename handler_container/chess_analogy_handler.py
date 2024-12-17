@@ -7,7 +7,8 @@ import runpod
 import ollama
 
 #my_model='llama2'
-my_model='mistral'
+#my_model='mistral'
+my_model='starling-lm'
 
 # Can this be in the Dockerfile? Should it be (large)?
 print("Pulling model", my_model)
