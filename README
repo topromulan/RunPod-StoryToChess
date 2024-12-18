@@ -3,13 +3,21 @@ RunPod-StoryToChess by Dale Anderson
 
 Build the Dockerfile in the handler subdirectory and push it. Or use dockermccoy/runpod:chess_analogy_handler
 
-Export your RunPod API key as MY_API_KEY.
+To run it locally, 
+ - Export your RunPod API key as MY_API_KEY.
+ - Run the client ChessStory.sh at that same command line.
+ - With no arguments, it will ask you to write a story and return your story ID.
+ - To read the chess interpretation of your story, supply the story ID as an argument.
 
-Run the client ChessStory.sh at that same command line.
-
-With no arguments, it will ask you to write a story and return your story ID.
-
-To read the chess interpretation of your story, supply the story ID as an argument.
-
-To test handler on the local machine, try:
+To test handler on the local machine, install ollama and the same dependencies as the continer, then try:
  - python3.exe chess_analogy_handler.sh --test_input='{"input":{"story":"A chocolate cow makes way to a new pasture and strawberry flavor."}}'
+
+To use the hosted instance on RunPod, use the bash client like this:
+ - To write a new story and get the Story ID: client/ChessStory.sh
+ - To get the generated text for your Story ID: client/ChessStory.sh <Story ID>
+
+KNOWN ISSUES:
+ - Cold start may take up to a minute or longer. Status 12/18/2024: Working on it; it is due to ollama pulling the model. This should be fixed soon by storing the model on a persistent volume, or acquiring it during the docker build.
+ - ENDPOINT is currently hardcoded for the offical endpoint at the author's RunPod endpoint.
+ - Usage on RunPod (but not locally) requires a runpod API key.
+
