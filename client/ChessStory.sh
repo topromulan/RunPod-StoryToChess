@@ -42,7 +42,7 @@ if [ $# -eq 0 ]; then
 	echo Please type it in now, then end file by pressing ^D on a blank line.
 	echo To cancel your story, press ^C.
 	echo - ---
-	story=$(cat | tr '\n' .)
+	story=$(cat | paste -sd.)
 
 	echo -e "Your story was as follows:\n\n$story\n\n"
 

@@ -18,12 +18,11 @@ print("Pulling model", my_model)
 ollama.pull(model=my_model)
 print("Pulled!")
 
-llama_instructions=open(dirname(argv[0]) + "/model_instructions.txt").read()
+llama_instructions=open("/opt/ChessStory/model_instructions.txt").read()
 
 llama_instructions += """
 Everything after this line is the user story:
 My user story is as follows. """
-
 
 def handler(job):
     job_input = job["input"]
