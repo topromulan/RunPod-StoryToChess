@@ -1,9 +1,11 @@
-#!/bin/sh
+#!/bin/sh -e
 
-echo CHESS ANALOGIES
+echo CHESS ANALOGIES STORY SERVICE
+echo -n 2024 by Dale Anderson "<lime.dale"
+echo -e "@gmail.com>\n"
 
-echo -- - Starting Ollama
-nohup ollama serve 2>&1 | tee /ollama.out &
+echo -- - Starting Ollama service
+nohup ollama serve 2>&1 | tee /var/log/ollama_serve.out &
 sleep 5
 
 echo
