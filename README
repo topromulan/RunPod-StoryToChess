@@ -4,7 +4,7 @@ RunPod-StoryToChess by Dale Anderson
 Build the Dockerfile in the handler subdirectory and push it. Or use dockermccoy/runpod:chess_analogy_handler
 
 To run it locally, 
- - Export your RunPod API key as MY_API_KEY.
+ - Export your RunPod API key as MY_RUNPOD_API_KEY.
  - Run the client ChessStory.sh at that same command line.
  - With no arguments, it will ask you to write a story and return your story ID.
  - To read the chess interpretation of your story, supply the story ID as an argument.
