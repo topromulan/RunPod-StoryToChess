@@ -31,11 +31,16 @@ cd `dirname "$0"` || errorquit Failed to change to install directory.
 
 ENDPOINT=$(<$ENDPOINT_FILE) || errorquit Unable to read $ENDPOINT_FILE
 
-RW_KEY="$MY_RUNPOD_API_KEY"
-RO_KEY="$RW_KEY"
+RUNPOD_API_KEY="$MY_RUNPOD_API_KEY"
+[ -n "$RUNPOD_API_KEY" ] && {
+	echo Just to confirm: Using  your MY_RUNPOD_API_KEY.
+} || {
+	RUNPOD_API_KEY_FILE=dat/api_key.dat
+	[ -e $RUNPOD_API_KEY_FILE ] && RUNPOD_API_KEY=$(<$RUNPOD_API_KEY_FILE) || \
+		errorquit Unable to read $RUNPOD_API_KEY_FILE. Please fix or export MY_RUNPOD_API_KEY.
+}
 
-[ -n "$RW_KEY" ] || errorquit Remember to export MY_RUNPOD_API_KEY
-[[ "$RW_KEY" =~ ^rpa_[[:alnum:]]{46}$ ]] || errorquit "Bad API KEY"
+[[ "$RUNPOD_API_KEY" =~ ^rpa_[[:alnum:]]{46}$ ]] || errorquit "Bad API KEY!"
 
 if [ $# -eq 0 ]; then 
 	echo Getting your story: Please type it as long as you want.
@@ -49,7 +54,7 @@ if [ $# -eq 0 ]; then
 	URL="https://api.runpod.ai/v2/$ENDPOINT/run"
 	json=$( curl -sX POST -s "$URL" \
 		-H "Content-Type: application/json" \
-		-H "Authorization: Bearer $RW_KEY" \
+		-H "Authorization: Bearer $RUNPOD_API_KEY" \
 		-d "{\"input\": {\"story\":\"$story\"}}"
 	) || errorquit Failure calling API.
 
@@ -70,7 +75,7 @@ else
 	URL="https://api.runpod.ai/v2/$ENDPOINT/status/$ENTITY_ID"
 
 	json=$( 
-		curl -s "$URL" -H 'Content-Type: application/json' -H "Authorization: Bearer $RO_KEY"
+		curl -s "$URL" -H 'Content-Type: application/json' -H "Authorization: Bearer $RUNPOD_API_KEY"
 	) || errorquit Failure calling API.
 
 	status=$( echo $json | jq '.status' | tr -d '"' )
