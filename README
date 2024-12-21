@@ -18,6 +18,4 @@ To use the hosted instance on RunPod, use the bash client like this:
 
 KNOWN ISSUES:
  - Cold start may take up to a minute or longer. Status 12/18/2024: Working on it; it is due to ollama pulling the model. This should be fixed soon by storing the model on a persistent volume, or acquiring it during the docker build.
- - ENDPOINT is currently hardcoded for the offical endpoint at the author's RunPod endpoint.
- - Usage on RunPod (but not locally) requires a runpod API key.
 
