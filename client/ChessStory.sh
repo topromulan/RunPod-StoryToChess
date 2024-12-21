@@ -47,21 +47,29 @@ if [ $# -eq 0 ]; then
 	echo Please type it in now, then end file by pressing ^D on a blank line.
 	echo To cancel your story, press ^C.
 	echo - ---
-	story=$(cat | paste -sd.)
+	rawstory=$(</dev/stdin)
+	story=$(echo "$rawstory" | sed -z 's/\n/\\n/g' | jq -R . | tail -c+2 | head -c-2)
 
-	echo -e "Your story was as follows:\n\n$story\n\n"
+	JSON_PROMPT="{\"input\": {\"story\":\"$story\"}}"
 
 	URL="https://api.runpod.ai/v2/$ENDPOINT/run"
 	json=$( curl -sX POST -s "$URL" \
 		-H "Content-Type: application/json" \
 		-H "Authorization: Bearer $RUNPOD_API_KEY" \
-		-d "{\"input\": {\"story\":\"$story\"}}"
+		-d "$JSON_PROMPT" 
 	) || errorquit Failure calling API.
 
 	ENTITY_ID=$( echo "$json" | jq -r '.id' ) || errorquit "Failed to parse response JSON."
 
+	[ $ENTITY_ID == none ] && {
+		echo This error may mean special characters in your story were not handled properly.
+		(exit 99); errorquit crap
+	}
+
 	echo "Story ID: $ENTITY_ID"
 	echo
+
+	[ $ENTITY_ID != null ] || errorquit This error may be due to special character format escapating issues in your story.
 	echo Now, type this to read your story:
 	echo $0 $ENTITY_ID
 	echo
